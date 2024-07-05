@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" xsi:type="MailApp">
+  <Id>ce6d5035-1be6-4321-a2cf-bce10efc11b0</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Contoso</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Spam Reporting"/>
+  <Description DefaultValue="A template to get started."/>
+  <IconUrl DefaultValue="https://junaid042.github.io/spam-reporting/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://junaid042.github.io/spam-reporting/icon-128.png"/>
+  <SupportUrl DefaultValue="https://www.contoso.com/help"/>
+  <AppDomains>
+    <AppDomain>https://www.contoso.com</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://www.contoso.com/taskpane.html"/>
+        <RequestedHeight>250</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.14">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <Runtimes>
+            <!-- References the HTML file that links to the spam-reporting event handler.
+                 This is used by Outlook on the web and on the new Mac UI, and new Outlook on Windows (preview). -->
+            <Runtime resid="WebViewRuntime.Url">
+              <!-- References the JavaScript file that contains the spam-reporting event handler. This is used by classic Outlook on Windows. -->
+              <Override type="javascript" resid="JSRuntime.Url"/>
+            </Runtime>
+          </Runtimes>
+          <DesktopFormFactor>
+            <FunctionFile resid="WebViewRuntime.Url"/>
+            <!-- Implements the integrated spam-reporting feature in the add-in. -->
+            <ExtensionPoint xsi:type="ReportPhishingCommandSurface">
+              <ReportPhishingCustomization>
+                <!-- Configures the ribbon button. -->
+                <Control xsi:type="Button" id="spamReportingButton">
+                  <Label resid="spamButton.Label"/>
+                  <Supertip>
+                    <Title resid="spamButton.Label"/>
+                    <Description resid="spamSuperTip.Text"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>onSpamReport</FunctionName>
+                  </Action>
+                </Control>
+                <!-- Configures the preprocessing dialog. -->
+                <PreProcessingDialog>
+                  <Title resid="PreProcessingDialog.Label"/>
+                  <Description resid="PreProcessingDialog.Text"/>
+                  <ReportingOptions>
+                    <Title resid="OptionsTitle.Label"/>
+                    <Option resid="Option1.Label"/>
+                    <Option resid="Option2.Label"/>
+                    <Option resid="Option3.Label"/>
+                  </ReportingOptions>
+                  <FreeTextLabel resid="FreeText.Label"/>
+                  <MoreInfo>
+                    <MoreInfoText resid="MoreInfo.Label"/>
+                    <MoreInfoUrl resid="MoreInfo.Url"/>
+                  </MoreInfo>
+                </PreProcessingDialog>
+                <!-- Identifies the runtime to be used. This is also referenced by the Runtime element. -->
+                <SourceLocation resid="WebViewRuntime.Url"/>
+              </ReportPhishingCustomization>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Images>
+          <bt:Image id="Icon.16x16" DefaultValue="https://junaid042.github.io/spam-reporting/icon-16.png"/>
+          <bt:Image id="Icon.32x32" DefaultValue="https://junaid042.github.io/spam-reporting/icon-32.png"/>
+          <bt:Image id="Icon.80x80" DefaultValue="https://junaid042.github.io/spam-reporting/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://www.contoso.com/commands.html"/>
+          <bt:Url id="JSRuntime.Url" DefaultValue="https://www.contoso.com/spamreporting.js"/>
+          <bt:Url id="MoreInfo.Url" DefaultValue="https://www.contoso.com/spamreporting"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="spamButton.Label" DefaultValue="Report Spam Mail"/>
+          <bt:String id="PreProcessingDialog.Label" DefaultValue="Report Spam Mail"/>
+          <bt:String id="OptionsTitle.Label" DefaultValue="Um was für ein Mail handelt es sich?"/>
+          <bt:String id="FreeText.Label" DefaultValue="Provide additional information, if any:"/>
+          <bt:String id="MoreInfo.Label" DefaultValue="Reporting unsolicited messages"/>
+          <bt:String id="Option1.Label" DefaultValue="Es handelt sich um Spam."/>
+          <bt:String id="Option2.Label" DefaultValue="Es handelt sich um Phishing."/>
+          <bt:String id="Option3.Label" DefaultValue="I'm not sure this is a legitimate email."/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="spamSuperTip.Text" DefaultValue="Report an unsolicited message."/>
+          <bt:String id="PreProcessingDialog.Text" DefaultValue="Thank you for reporting this message."/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>
